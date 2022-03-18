@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import math from 'mathjs-expression-parser'
-import _clone from 'lodash/clone'
-import _escapeRegExp from 'lodash/escapeRegExp'
 import './App.css';
 
 
@@ -25,7 +23,7 @@ class App extends Component {
   }
 
   checkFormula = () => {
-    const inputFormula = this.inputFields(this.state.formula)
+    const inputFormula = this.state.formula
     const res = this.resultFunc(inputFormula)
     this.setState({
       inputFormula: inputFormula,
@@ -33,25 +31,10 @@ class App extends Component {
     })
   }
 
-  inputFields = (formula) => {
-    let swappedFormula = _clone(formula)
-    const variables = swappedFormula.match(/\{[^\{\}]+\}/gi) || []
-    const variablesArray = variables.map(myVariableWithBrackets => {
-      return myVariableWithBrackets.slice(1, -1)
-    })
-    variablesArray.map(myVariable => {
-      swappedFormula = swappedFormula.replace(
-        new RegExp('{'+_escapeRegExp(myVariable)+'}', 'gi'),
-        '1'
-      )
-    })
-    return swappedFormula
-  }
-
-  resultFunc = (mathString) => {
-    let res
+  resultFunc = (value) => {
+    let res;
     try{
-      res = math.eval(mathString)
+      res = math.eval(value);
       if(this.state.checkResult !== 'Правильно!'){
         this.setState({
           checkResult: 'Правильно!'
@@ -59,18 +42,17 @@ class App extends Component {
       }
     }
     catch(err){
-      console.log(err)
-      res = ''
+      res = '';
       if(this.state.checkResult !== 'Неверное выражение'){
         this.setState({
           checkResult: 'Неверное выражение'
         })
       }
     }
-    return res
+    return res;
   }
 
-  getcheckResultColor = () => {
+  checkResultColor = () => {
     if(this.state.checkResult === 'Правильно!'){
       return 'green'
     }
@@ -89,7 +71,7 @@ class App extends Component {
           <input style={{width: '300px'}} type="text" value={this.state.formula} onChange={this.changeFormula} /> = {this.state.res}
 
         <p>
-          Правильность: <span style={{color: this.getcheckResultColor()}}>{this.state.checkResult}</span>
+          Правильность: <span style={{color: this.checkResultColor()}}>{this.state.formula ? this.state.checkResult : ""}</span>
         </p>
       </div>
     );
