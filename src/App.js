@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import math from 'mathjs-expression-parser'
 import './App.css';
 
@@ -69,7 +69,6 @@ class App extends Component {
           Введите формулу:
         </p>
           <input style={{width: '300px'}} type="text" value={this.state.formula} onChange={this.changeFormula} /> = {this.state.res}
-
         <p>
           Правильность: <span style={{color: this.checkResultColor()}}>{this.state.formula ? this.state.checkResult : ""}</span>
         </p>
